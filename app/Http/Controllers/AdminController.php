@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Message; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail; 
 use Illuminate\Support\Facades\Storage;
 
@@ -51,8 +52,15 @@ class AdminController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('book_covers', 'public');
         }
 
-        $data['slug'] = Str::slug($request->title);
-        Book::create($data);
+        // The `description` column is NOT NULL, so never send null.
+        $data['description'] = $data['description'] ?? '';
+
+        // The `slug` column is NOT NULL and UNIQUE.
+        $data['slug'] = $this->uniqueSlug($request->title);
+
+        // forceFill() makes sure `slug` is saved even if it is missing from Book::$fillable.
+        $book = new Book();
+        $book->forceFill($data)->save();
 
         return redirect()->route('admin.dashboard')->with('success', 'Book created successfully!');
     }
@@ -84,8 +92,12 @@ class AdminController extends Controller
             $data['cover_image'] = $request->file('cover_image')->store('book_covers', 'public');
         }
 
-        $data['slug'] = Str::slug($request->title);
-        $book->update($data);
+        // The `description` column is NOT NULL, so never send null.
+        $data['description'] = $data['description'] ?? '';
+
+        $data['slug'] = $this->uniqueSlug($request->title, $book->id);
+
+        $book->forceFill($data)->save();
 
         return redirect()->route('admin.dashboard')->with('success', 'Book updated successfully!');
     }
@@ -101,6 +113,27 @@ class AdminController extends Controller
         $book->delete(); // This will now set the deleted_at column instead of a hard delete
         
         return back()->with('success', 'Book archived successfully! Existing orders remain safe.');
+    }
+
+    /**
+     * Build a slug that is unique in the books table (archived books included).
+     */
+    private function uniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title) ?: 'book';
+        $slug = $base;
+        $i = 2;
+
+        while (
+            DB::table('books')
+                ->where('slug', $slug)
+                ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $base . '-' . $i++;
+        }
+
+        return $slug;
     }
 
     /* --- Category Management --- */

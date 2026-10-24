@@ -36,8 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('remove.from.cart');
 
     // AI Chatbot Route (NEW)
-    Route::post('/chat/ask', [ChatBotController::class, 'ask'])->name('chat.ask');
-
+    Route::post('/assistant/ask', [ChatBotController::class, 'ask'])->name('chat.ask'); 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
