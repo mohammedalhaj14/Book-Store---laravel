@@ -1,22 +1,11 @@
 # 📚 Bookstore AI Assistant (BookBot)
 
-**BookBot** is a high-performance bookstore management system featuring an integrated AI assistant. Built on **Laravel 12**, it leverages the **Gemini 3 Flash** model to provide real-time book recommendations, inventory inquiries, and literary guidance.
+**BookBot** is a high-performance bookstore management system featuring an integrated AI assistant. Built on **Laravel 9**, it leverages the **Gemini 3 Flash** model to provide real-time book recommendations, inventory inquiries, and literary guidance.
 
-## 📸 Project Showcase
+## 🌐 Live Demo
+**👉 [https://bookstore-demo.infinityfree.io](https://bookstore-demo.infinityfree.io)**
 
-Experience the interface of **BookBot**. Below are the core user and administrative modules.
-
-| **Login Interface** | **Account Registration** |
-| --- | --- |
-| <img src="./public/images/login.png" width="400"> | <img src="./public/images/register.png" width="400"> |
-| *Secure access for users & admins* | *Quick onboarding for new customers* |
-
-| **Customer Dashboard** | **Admin Control Panel** |
-| --- | --- |
-| <img src="./public/images/customer account.png" width="400"> | <img src="./public/images/admin panel.png" width="400"> |
-| *Manage profile & order history* | *Total control over inventory & users* |
-
----
+> The demo is hosted on a free hosting plan, so the first load may be slow.
 
 ## 🌟 Key Features
 
@@ -28,7 +17,7 @@ Experience the interface of **BookBot**. Below are the core user and administrat
 
 ## 🛠️ Technical Stack
 
-* **Backend:** Laravel 12.x
+* **Backend:** Laravel 9.x
 * **Frontend:** Blade Templates, Bootstrap 5.3, Vanilla JavaScript (Fetch API)
 * **AI Engine:** Google Generative AI (`gemini-3-flash-preview`)
 * **Database:** MySQL 8.0+
@@ -45,55 +34,49 @@ Experience the interface of **BookBot**. Below are the core user and administrat
 **Challenge:** Maintaining context in a web environment without bloated database calls.
 **Solution:** Implemented a lightweight session-based history management system that allows the AI to "remember" the last 5 exchanges while keeping latency low.
 
+### 3. Deploying the Chatbot Route on Free Hosting
+
+**Challenge:** The AI chat endpoint returned a 403 error on the free hosting provider, even though it worked locally.
+**Solution:** The provider blocks URLs containing the word "chat". Renaming the route (while keeping its internal name) resolved the issue.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-* PHP 8.2 or higher
+* PHP 8.1 or higher
 * Composer
 * A Google AI Studio API Key
 
 ### Installation
 
 1. **Clone the Repository**
-```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd bookstore-chatbot
-
-```
-
+   ```bash
+   git clone https://github.com/mohammedalhaj14/Book-Store---laravel.git
+   cd Book-Store---laravel
+   ```
 
 2. **Install Dependencies**
-```bash
-composer install
-
-```
-
+   ```bash
+   composer install
+   ```
 
 3. **Configure Environment**
-```bash
-cp .env.example .env
-php artisan key:generate
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   Open `.env` and set your `GEMINI_API_KEY` and local database credentials.
 
-```
-
-
-*Open `.env` and set your `GEMINI_API_KEY` and local database credentials.*
 4. **Database Initialization**
-```bash
-php artisan migrate
-# Optional: Import database/backups/database.sql into your MySQL client
-
-```
-
+   ```bash
+   php artisan migrate
+   # Optional: import the provided .sql file into your MySQL client
+   ```
 
 5. **Run Application**
-```bash
-php artisan serve
-
-```
-
-
+   ```bash
+   php artisan serve
+   ```
 
 ## 📄 License
 
